@@ -967,6 +967,10 @@ name = "sakata-bot"
 version = "0.1.0"
 dependencies = [
  "jikan-rs",
+ "log",
+ "reqwest",
+ "serde",
+ "serde_json",
  "serenity",
  "tokio",
 ]
