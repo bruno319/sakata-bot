@@ -32,5 +32,7 @@ pub async fn execute(ctx: Context, msg: Message, api: &SakataApi) {
         }
     };
 
-    msg.channel_id.say(&ctx.http, response).await.unwrap();
+    if let Err(e) = msg.channel_id.say(&ctx.http, response).await {
+        error!("{}", e);
+    };
 }

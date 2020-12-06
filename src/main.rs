@@ -7,6 +7,7 @@ use serenity::{
 };
 
 use crate::api::SakataApi;
+use log::*;
 
 mod command;
 mod api;
@@ -32,17 +33,21 @@ impl EventHandler for Handler {
         let cmd = args.next().unwrap_or_default();
         match cmd {
             "!join" => command::join::execute(ctx, msg, &self.api).await,
+            "!card" => command::card::execute(ctx, msg, &self.api).await,
             _ => {}
         }
     }
 
     async fn ready(&self, _: Context, ready: Ready) {
-        println!("{} is connected", ready.user.name)
+        info!("{} is connected", ready.user.name)
     }
 }
 
 #[tokio::main]
 async fn main() {
+    std::env::set_var("RUST_LOG", "");
+    env_logger::init();
+
     let token = env::var("DISCORD_TOKEN")
         .expect("Expected discord token in the environment");
 
@@ -52,6 +57,6 @@ async fn main() {
         .expect("Err create client");
 
     if let Err(e) = client.start().await {
-        eprintln!("Error on starting client: {}", e)
+        error!("Error on starting client: {}", e)
     }
 }
