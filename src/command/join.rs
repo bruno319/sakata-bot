@@ -4,7 +4,7 @@ use serenity::prelude::Context;
 use serenity::utils::MessageBuilder;
 
 use crate::api::SakataApi;
-use crate::model::PlayerDto;
+use crate::types::PlayerDto;
 
 pub async fn execute(ctx: Context, msg: Message, api: &SakataApi) {
     let player = PlayerDto {

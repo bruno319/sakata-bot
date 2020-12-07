@@ -1,5 +1,6 @@
 use std::env;
 
+use log::*;
 use serenity::{
     async_trait,
     model::{channel::Message, gateway::Ready},
@@ -7,11 +8,10 @@ use serenity::{
 };
 
 use crate::api::SakataApi;
-use log::*;
 
 mod command;
 mod api;
-pub mod model;
+pub mod types;
 
 struct Handler {
     api: SakataApi,
@@ -34,6 +34,7 @@ impl EventHandler for Handler {
         match cmd {
             "!join" => command::join::execute(ctx, msg, &self.api).await,
             "!card" => command::card::execute(ctx, msg, &self.api).await,
+            "!starcard" => command::starcard::execute(ctx, msg, &self.api).await,
             _ => {}
         }
     }
@@ -45,7 +46,7 @@ impl EventHandler for Handler {
 
 #[tokio::main]
 async fn main() {
-    std::env::set_var("RUST_LOG", "");
+    std::env::set_var("RUST_LOG", "debug");
     env_logger::init();
 
     let token = env::var("DISCORD_TOKEN")

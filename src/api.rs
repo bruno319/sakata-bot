@@ -2,7 +2,7 @@ use std::env;
 
 use reqwest::Error;
 
-use crate::model::{Player, PlayerCard, PlayerDto};
+use crate::types::{Player, PlayerCard, PlayerDto};
 
 pub struct SakataApi {
     api_url: String,
@@ -30,6 +30,15 @@ impl SakataApi {
     pub async fn buy_common_card(&self, discord_id: u64) -> Result<PlayerCard, Error> {
         self.client
             .get(&format!("{}/players/{}/common-card", self.api_url, discord_id))
+            .send()
+            .await?
+            .json()
+            .await
+    }
+
+    pub async fn buy_star_card(&self, discord_id: u64) -> Result<PlayerCard, Error> {
+        self.client
+            .get(&format!("{}/players/{}/star-card", self.api_url, discord_id))
             .send()
             .await?
             .json()

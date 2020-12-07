@@ -1,21 +1,25 @@
 use std::path::Path;
 
 use log::*;
+use reqwest::Error;
 use serenity::builder::CreateEmbed;
 use serenity::http::AttachmentType;
 use serenity::model::prelude::Message;
 use serenity::prelude::Context;
 
 use crate::api::SakataApi;
-use crate::model::PlayerCard;
+use crate::types::PlayerCard;
 
 pub async fn execute(ctx: Context, msg: Message, api: &SakataApi) {
-    let acquired_card = api.buy_common_card(msg.author.id.0).await;
+    let obtained_card = api.buy_common_card(msg.author.id.0).await;
+    send_obtained_card(&ctx, msg, obtained_card).await
+}
 
-    let result_send_msg = match acquired_card {
+pub async fn send_obtained_card(ctx: &Context, msg: Message, card: Result<PlayerCard, Error>) {
+    let result_send_msg = match card {
         Ok(card) => {
             msg.channel_id.send_message(&ctx.http, |m| {
-                m.content(format!("{} acquired {}", msg.author.name, card.name));
+                m.content(format!("{} obtained {}", msg.author.name, card.name));
                 m.embed(|e| create_embed(e, &card));
                 m.add_file(AttachmentType::Path(Path::new(&card.image_url)));
                 m
