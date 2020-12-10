@@ -21,7 +21,7 @@ pub struct PlayerCard {
     pub card_id: i32,
     pub name: String,
     pub rarity: Rarity,
-    pub image_url: String,
+    pub image: String,
     pub quantity: i8,
     pub class: Class,
     pub genre: Genre,

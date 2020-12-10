@@ -8,19 +8,23 @@ use serenity::{
 };
 
 use crate::api::SakataApi;
+use crate::s3::AwsS3Client;
 
 mod command;
 mod api;
+mod s3;
 pub mod types;
 
 struct Handler {
     api: SakataApi,
+    s3: AwsS3Client,
 }
 
 impl Handler {
     fn new() -> Handler {
         Handler {
             api: SakataApi::new(),
+            s3: AwsS3Client::new(),
         }
     }
 }
@@ -33,8 +37,8 @@ impl EventHandler for Handler {
         let cmd = args.next().unwrap_or_default();
         match cmd {
             "!join" => command::join::execute(ctx, msg, &self.api).await,
-            "!card" => command::card::execute(ctx, msg, &self.api).await,
-            "!starcard" => command::starcard::execute(ctx, msg, &self.api).await,
+            "!card" => command::card::execute(ctx, msg, &self.api, &self.s3).await,
+            "!starcard" => command::starcard::execute(ctx, msg, &self.api, &self.s3).await,
             _ => {}
         }
     }
@@ -46,7 +50,7 @@ impl EventHandler for Handler {
 
 #[tokio::main]
 async fn main() {
-    std::env::set_var("RUST_LOG", "debug");
+    std::env::set_var("RUST_LOG", "");
     env_logger::init();
 
     let token = env::var("DISCORD_TOKEN")
