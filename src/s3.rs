@@ -1,13 +1,20 @@
+use std::sync::Arc;
+
 use bytes::{Bytes, BytesMut};
 use rusoto_core::Region;
 use rusoto_s3::{GetObjectRequest, S3, S3Client};
 use serenity::futures::TryStreamExt;
+use serenity::prelude::TypeMapKey;
 
 pub struct AwsS3Client {
     #[allow(dead_code)]
     region: Region,
     s3: S3Client,
     bucket_name: String,
+}
+
+impl TypeMapKey for AwsS3Client {
+    type Value = Arc<AwsS3Client>;
 }
 
 impl AwsS3Client {

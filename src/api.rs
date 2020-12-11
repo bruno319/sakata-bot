@@ -1,12 +1,18 @@
 use std::env;
+use std::sync::Arc;
 
 use reqwest::Error;
+use serenity::prelude::TypeMapKey;
 
 use crate::types::{Player, PlayerCard, PlayerDto};
 
 pub struct SakataApi {
     api_url: String,
     client: reqwest::Client,
+}
+
+impl TypeMapKey for SakataApi {
+    type Value = Arc<SakataApi>;
 }
 
 impl SakataApi {

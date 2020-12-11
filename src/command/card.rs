@@ -8,11 +8,23 @@ use crate::api::SakataApi;
 use crate::s3::AwsS3Client;
 use crate::types::PlayerCard;
 
-pub async fn execute(ctx: Context, msg: Message, api: &SakataApi, s3: &AwsS3Client) {
-    let obtained_card = api.buy_common_card(msg.author.id.0).await;
+pub async fn execute(ctx: Context, msg: Message) {
+    let obtained_card = {
+        let api = {
+            let data = ctx.data.read().await;
+            data.get::<SakataApi>().unwrap().clone()
+        };
+        api.buy_common_card(msg.author.id.0).await
+    };
     match obtained_card {
         Ok(card) => {
-            let image = s3.get_object(&card.image).await;
+            let image = {
+                let s3 = {
+                    let data = ctx.data.read().await;
+                    data.get::<AwsS3Client>().unwrap().clone()
+                };
+                s3.get_object(&card.image).await
+            };
             send_obtained_card(&ctx, msg, card, image.unwrap()).await
         }
         Err(e) => {

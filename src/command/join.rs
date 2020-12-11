@@ -6,13 +6,19 @@ use serenity::utils::MessageBuilder;
 use crate::api::SakataApi;
 use crate::types::PlayerDto;
 
-pub async fn execute(ctx: Context, msg: Message, api: &SakataApi) {
+pub async fn execute(ctx: Context, msg: Message) {
     let player = PlayerDto {
         nickname: msg.author.name.clone(),
         discord_id: msg.author.id.0,
     };
 
-    let player = api.save_player(player).await;
+    let player = {
+        let api = {
+            let data = ctx.data.read().await;
+            data.get::<SakataApi>().unwrap().clone()
+        };
+        api.save_player(player).await
+    };
 
     let response = match player {
         Ok(p) => MessageBuilder::new()

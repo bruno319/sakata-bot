@@ -9,25 +9,14 @@ use serenity::{
 
 use crate::api::SakataApi;
 use crate::s3::AwsS3Client;
+use std::sync::Arc;
 
 mod command;
 mod api;
 mod s3;
 pub mod types;
 
-struct Handler {
-    api: SakataApi,
-    s3: AwsS3Client,
-}
-
-impl Handler {
-    fn new() -> Handler {
-        Handler {
-            api: SakataApi::new(),
-            s3: AwsS3Client::new(),
-        }
-    }
-}
+struct Handler;
 
 #[async_trait]
 impl EventHandler for Handler {
@@ -36,9 +25,9 @@ impl EventHandler for Handler {
         let mut args = content.split_whitespace();
         let cmd = args.next().unwrap_or_default();
         match cmd {
-            "!join" => command::join::execute(ctx, msg, &self.api).await,
-            "!card" => command::card::execute(ctx, msg, &self.api, &self.s3).await,
-            "!starcard" => command::starcard::execute(ctx, msg, &self.api, &self.s3).await,
+            "!join" => command::join::execute(ctx, msg).await,
+            "!card" => command::card::execute(ctx, msg).await,
+            "!starcard" => command::starcard::execute(ctx, msg).await,
             _ => {}
         }
     }
@@ -57,9 +46,16 @@ async fn main() {
         .expect("Expected discord token in the environment");
 
     let mut client = Client::builder(token)
-        .event_handler(Handler::new())
+        .event_handler(Handler)
         .await
         .expect("Err create client");
+
+    {
+        let mut data = client.data.write().await;
+
+        data.insert::<AwsS3Client>(Arc::new(AwsS3Client::new()));
+        data.insert::<SakataApi>(Arc::new(SakataApi::new()));
+    }
 
     if let Err(e) = client.start().await {
         error!("Error on starting client: {}", e)
