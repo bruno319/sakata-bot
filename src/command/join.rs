@@ -5,7 +5,7 @@ use serenity::utils::MessageBuilder;
 
 use crate::api::SakataApi;
 use crate::embed;
-use crate::types::json::{Player, PlayerJoinedJson};
+use crate::types::json::{Party, Player, PlayerJoinedJson};
 
 pub async fn execute(ctx: Context, msg: Message) {
     let player = PlayerJoinedJson {
@@ -22,12 +22,14 @@ pub async fn execute(ctx: Context, msg: Message) {
     };
 
     let response = match player {
-        Ok(mut p) => {
-            let thumbnail = msg.author.avatar_url().unwrap_or_default();
+        Ok(p) => {
             msg.channel_id.send_message(&ctx.http, |m| {
+                let nick = msg.author.name.clone();
+                let thumb = msg.author.avatar_url().unwrap_or_default();
                 let content = create_join_msg(&msg.author, &p);
+
                 m.content(content);
-                m.embed(|e| embed::party(e, &mut p, &thumbnail));
+                m.embed(|e| embed::party(e, &mut Party::from(p), &nick, &thumb));
                 m
             }).await
         }

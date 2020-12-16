@@ -3,7 +3,7 @@ use std::cmp::Reverse;
 use serenity::builder::CreateEmbed;
 use serenity::utils::Colour;
 
-use crate::types::json::{Player, PlayerCard};
+use crate::types::json::{Party, PlayerCard};
 
 pub fn card<'a, 'b>(embed: &'b mut CreateEmbed, card: &'a PlayerCard, thumb: &str) -> &'b mut CreateEmbed {
     embed.color(card.rarity.get_colour());
@@ -18,13 +18,13 @@ pub fn card<'a, 'b>(embed: &'b mut CreateEmbed, card: &'a PlayerCard, thumb: &st
     embed
 }
 
-pub fn party<'a, 'b>(embed: &'b mut CreateEmbed, player: &'a mut Player, thumb: &str) -> &'b mut CreateEmbed {
+pub fn party<'a, 'b>(embed: &'b mut CreateEmbed, party: &'a mut Party, owner: &str, thumb: &str) -> &'b mut CreateEmbed {
     embed.color(Colour::DARK_RED);
-    embed.title(format!("{}'s Party", player.nickname));
-    embed.description(format!("Overall Power **{}**\u{2694}", player.party_power));
+    embed.title(format!("{}'s Party", owner));
+    embed.description(format!("Overall Power **{}**\u{2694}", party.power));
     embed.thumbnail(thumb);
-    player.party.sort_by_key(|c| Reverse(c.overall_power));
-    let (cards, stats) = player.party
+    party.cards.sort_by_key(|c| Reverse(c.overall_power));
+    let (cards, stats) = party.cards
         .iter()
         .map(|c| {
             let n = format!("{}\n", c.name);

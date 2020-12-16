@@ -29,6 +29,7 @@ impl EventHandler for Handler {
             "!join" => command::join::execute(ctx, msg).await,
             "!card" => command::card::execute(ctx, msg).await,
             "!starcard" => command::starcard::execute(ctx, msg).await,
+            "!party" => command::party::execute(ctx, msg).await,
             _ => {}
         }
     }

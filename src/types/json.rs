@@ -30,3 +30,20 @@ pub struct PlayerJoinedJson {
     pub nickname: String,
     pub discord_id: u64,
 }
+
+#[derive(Deserialize, Debug)]
+pub struct Party {
+    pub id: i64,
+    pub power: u16,
+    pub cards: Vec<PlayerCard>,
+}
+
+impl From<Player> for Party {
+    fn from(player: Player) -> Self {
+        Party {
+            id: player.discord_id,
+            power: player.party_power,
+            cards: player.party,
+        }
+    }
+}
