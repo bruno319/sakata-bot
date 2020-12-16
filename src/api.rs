@@ -4,7 +4,7 @@ use std::sync::Arc;
 use reqwest::Error;
 use serenity::prelude::TypeMapKey;
 
-use crate::types::{Player, PlayerCard, PlayerDto};
+use crate::types::json::{Player, PlayerCard, PlayerJoinedJson};
 
 pub struct SakataApi {
     api_url: String,
@@ -23,7 +23,7 @@ impl SakataApi {
         }
     }
 
-    pub async fn save_player(&self, player: PlayerDto) -> Result<Player, Error> {
+    pub async fn save_player(&self, player: PlayerJoinedJson) -> Result<Player, Error> {
         self.client
             .post(&format!("{}/players", self.api_url))
             .json(&player)

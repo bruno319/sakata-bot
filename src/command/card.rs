@@ -1,12 +1,12 @@
 use bytes::{Buf, Bytes};
 use log::*;
-use serenity::builder::CreateEmbed;
 use serenity::model::prelude::Message;
 use serenity::prelude::Context;
 
 use crate::api::SakataApi;
+use crate::embed;
 use crate::s3::AwsS3Client;
-use crate::types::PlayerCard;
+use crate::types::json::PlayerCard;
 
 pub async fn execute(ctx: Context, msg: Message) {
     let obtained_card = {
@@ -43,7 +43,7 @@ pub async fn send_obtained_card(ctx: &Context, msg: Message, card: PlayerCard, i
     let thumbnail = msg.author.avatar_url().unwrap_or_default();
     let result_send_msg = msg.channel_id
         .send_message(&ctx.http, |m| {
-            m.embed(|e| create_embed(e, &card, &thumbnail));
+            m.embed(|e| embed::card(e, &card, &thumbnail));
             m.add_file(attachment);
             m
         }).await;
@@ -51,17 +51,4 @@ pub async fn send_obtained_card(ctx: &Context, msg: Message, card: PlayerCard, i
     if let Err(e) = result_send_msg {
         error!("{}", e)
     }
-}
-
-fn create_embed<'a, 'b>(embed: &'b mut CreateEmbed, card: &'a PlayerCard, thumb: &str) -> &'b mut CreateEmbed {
-    embed.color(card.rarity.get_colour());
-    embed.title(&card.name);
-    embed.thumbnail(thumb);
-    embed.attachment(&card.image);
-    embed.fields(vec![
-        ("Rarity", card.rarity.to_string(), false),
-        ("Class", card.class.to_string(), true),
-        ("Genre", card.genre.to_string(), true),
-    ]);
-    embed
 }

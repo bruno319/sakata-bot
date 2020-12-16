@@ -1,4 +1,5 @@
 use std::env;
+use std::sync::Arc;
 
 use log::*;
 use serenity::{
@@ -9,12 +10,12 @@ use serenity::{
 
 use crate::api::SakataApi;
 use crate::s3::AwsS3Client;
-use std::sync::Arc;
 
 mod command;
 mod api;
 mod s3;
-pub mod types;
+mod types;
+mod embed;
 
 struct Handler;
 

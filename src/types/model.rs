@@ -1,33 +1,7 @@
-use serde::{Deserialize, Serialize};
-use serde_repr::{Deserialize_repr, Serialize_repr};
+use serde_repr::Deserialize_repr;
 use serenity::utils::Colour;
 
-#[derive(Serialize, Deserialize, Debug)]
-pub struct Player {
-    pub id: Option<i32>,
-    pub nickname: String,
-    pub coins: i16,
-    pub stardust: i16,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct PlayerDto {
-    pub nickname: String,
-    pub discord_id: u64,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct PlayerCard {
-    pub card_id: i32,
-    pub name: String,
-    pub rarity: Rarity,
-    pub image: String,
-    pub quantity: i8,
-    pub class: Class,
-    pub genre: Genre,
-}
-
-#[derive(Serialize_repr, Deserialize_repr, PartialEq, Debug)]
+#[derive(Deserialize_repr, PartialEq, Debug)]
 #[repr(i8)]
 pub enum Class {
     Unknown = -1,
@@ -44,9 +18,9 @@ pub enum Class {
     Musician = 11,
 }
 
-#[derive(Serialize_repr, Deserialize_repr, PartialEq, Debug)]
+#[derive(Deserialize_repr, PartialEq, Debug)]
 #[repr(i8)]
-pub enum Genre {
+pub enum Domain {
     Unknown = -1,
     Action = 1,
     Adventure = 2,
@@ -58,7 +32,7 @@ pub enum Genre {
     Romance = 8,
 }
 
-#[derive(Serialize_repr, Deserialize_repr, PartialEq, Debug)]
+#[derive(Deserialize_repr, PartialEq, Debug)]
 #[repr(i8)]
 pub enum Rarity {
     Unknown = -1,
@@ -111,18 +85,18 @@ impl ToString for Class {
     }
 }
 
-impl ToString for Genre {
+impl ToString for Domain {
     fn to_string(&self) -> String {
         match self {
-            Genre::Action => "Action".to_string(),
-            Genre::Adventure => "Adventure".to_string(),
-            Genre::SciFi => "Sci-Fi".to_string(),
-            Genre::Sports => "Sports".to_string(),
-            Genre::Mystery => "Mystery".to_string(),
-            Genre::SliceOfLife => "Slice of Life".to_string(),
-            Genre::Comedy => "Comedy".to_string(),
-            Genre::Romance => "Romance".to_string(),
-            Genre::Unknown => "".to_string(),
+            Domain::Action => "Action".to_string(),
+            Domain::Adventure => "Adventure".to_string(),
+            Domain::SciFi => "Sci-Fi".to_string(),
+            Domain::Sports => "Sports".to_string(),
+            Domain::Mystery => "Mystery".to_string(),
+            Domain::SliceOfLife => "Slice of Life".to_string(),
+            Domain::Comedy => "Comedy".to_string(),
+            Domain::Romance => "Romance".to_string(),
+            Domain::Unknown => "".to_string(),
         }
     }
 }
