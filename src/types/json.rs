@@ -25,7 +25,7 @@ pub struct PlayerCard {
     pub quantity: u8,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Debug)]
 pub struct PlayerJoinedJson {
     pub nickname: String,
     pub discord_id: u64,
@@ -46,4 +46,10 @@ impl From<Player> for Party {
             cards: player.party,
         }
     }
+}
+
+#[derive(Serialize, Debug)]
+pub struct SwapCardsJson {
+    pub card_out: i32,
+    pub card_in: i32,
 }
