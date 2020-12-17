@@ -5,6 +5,8 @@ use crate::types::model::{Class, Domain, Rarity};
 #[derive(Deserialize, Debug)]
 pub struct Player {
     pub discord_id: i64,
+    pub channel_id: i64,
+    pub discriminator: u16,
     pub nickname: String,
     pub coins: i16,
     pub stardust: i16,
@@ -29,6 +31,8 @@ pub struct PlayerCard {
 pub struct PlayerJoinedJson {
     pub nickname: String,
     pub discord_id: u64,
+    pub channel_id: u64,
+    pub discriminator: u16,
 }
 
 #[derive(Deserialize, Debug)]
