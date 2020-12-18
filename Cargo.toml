@@ -11,8 +11,9 @@ reqwest = { version = "0.10.9", features = ["json"] }
 serde = "1.0"
 serde_json = "1.0"
 serde_repr = "0.1.6"
-log = "0.4.11"
-env_logger = "0.8.2"
+log = "0.4"
+fern = "0.5"
+chrono = "0.4"
 rusoto_s3 = "0.43.0"
 rusoto_core = "0.43.0"
 bytes = { version = "0.5", features = ["serde"] }

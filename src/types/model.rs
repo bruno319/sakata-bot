@@ -85,6 +85,25 @@ impl ToString for Class {
     }
 }
 
+impl From<Option<&str>> for Class {
+    fn from(s: Option<&str>) -> Self {
+        match s.unwrap_or_default().to_lowercase().as_str() {
+            "fighter" => Class::Fighter,
+            "magician" => Class::Magician,
+            "swordsman" => Class::Swordsman,
+            "ranger" => Class::Ranger,
+            "support" => Class::Support,
+            "beast" => Class::Beast,
+            "machinist" => Class::Machinist,
+            "supernatural" => Class::Supernatural,
+            "scholar" => Class::Scholar,
+            "worker" => Class::Worker,
+            "musician" => Class::Musician,
+            _ => Class::Unknown,
+        }
+    }
+}
+
 impl ToString for Domain {
     fn to_string(&self) -> String {
         match self {
@@ -97,6 +116,22 @@ impl ToString for Domain {
             Domain::Comedy => "Comedy".to_string(),
             Domain::Romance => "Romance".to_string(),
             Domain::Unknown => "".to_string(),
+        }
+    }
+}
+
+impl From<Option<&str>> for Domain {
+    fn from(s: Option<&str>) -> Self {
+        match s.unwrap_or_default().to_lowercase().as_str() {
+            "action" => Domain::Action,
+            "adventure" => Domain::Adventure,
+            "sci-Fi" => Domain::SciFi,
+            "sports" => Domain::Sports,
+            "mystery" => Domain::Mystery,
+            "slice of Life" => Domain::SliceOfLife,
+            "comedy" => Domain::Comedy,
+            "romance" => Domain::Romance,
+            _ => Domain::Unknown,
         }
     }
 }

@@ -69,4 +69,14 @@ impl SakataApi {
             .json()
             .await
     }
+
+    pub async fn query_cards(&self, discord_id: u64, query: Vec<(String, String)>) -> Result<Vec<PlayerCard>, Error> {
+        self.client
+            .get(&format!("{}/players/{}/cards", self.api_url, discord_id))
+            .query(&query)
+            .send()
+            .await?
+            .json()
+            .await
+    }
 }

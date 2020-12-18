@@ -31,6 +31,7 @@ impl EventHandler for Handler {
             "!starcard" => command::starcard::execute(ctx, msg).await,
             "!party" => command::party::execute(ctx, msg).await,
             "!swap" => command::swap::execute(ctx, msg, args).await,
+            "!c" => command::collection::execute(ctx, msg, args).await,
             _ => {}
         }
     }
@@ -42,8 +43,9 @@ impl EventHandler for Handler {
 
 #[tokio::main]
 async fn main() {
-    std::env::set_var("RUST_LOG", "");
-    env_logger::init();
+    if let Err(e) = setup_logger() {
+        panic!("Could not setup logger: {}", e);
+    }
 
     let token = env::var("DISCORD_TOKEN")
         .expect("Expected discord token in the environment");
@@ -63,4 +65,24 @@ async fn main() {
     if let Err(e) = client.start().await {
         error!("Error on starting client: {}", e)
     }
+}
+
+fn setup_logger() -> Result<(), fern::InitError> {
+    fern::Dispatch::new()
+        .format(|out, message, record| {
+            out.finish(format_args!(
+                "{}[{}][{}] {}",
+                chrono::Local::now().format("[%Y-%m-%d][%H:%M:%S]"),
+                record.target(),
+                record.level(),
+                message
+            ))
+        })
+        .level(log::LevelFilter::Debug)
+        .level_for("tracing", log::LevelFilter::Error)
+        .chain(std::io::stdout())
+        .chain(fern::log_file(
+            chrono::Utc::now().format("/tmp/sakata-bot[%Y-%m-%d].log").to_string())?
+        ).apply()?;
+    Ok(())
 }
