@@ -24,18 +24,20 @@ pub fn party<'a, 'b>(embed: &'b mut CreateEmbed, party: &'a mut Party, owner: &s
     embed.description(format!("Overall Power **{}**\u{2694}", party.power));
     embed.thumbnail(thumb);
     party.cards.sort_by_key(|c| Reverse(c.overall_power));
-    let (cards, stats) = party.cards
+    let (cards, stats, ids) = party.cards
         .iter()
         .map(|c| {
             let n = format!("{}\n", c.name);
             let s = format!("[**{}**] {}\n", c.overall_power, c.rarity.to_string());
-            (n, s)
+            let id = format!("{}\n", c.mal_id);
+            (n, s, id)
         })
-        .fold(("".to_string(), "".to_string()), |acc, i| {
-            (format!("{}{}", acc.0, i.0), format!("{}{}", acc.1, i.1))
+        .fold(("".to_string(), "".to_string(), "".to_string()), |acc, i| {
+            (format!("{}{}", acc.0, i.0), format!("{}{}", acc.1, i.1), format!("{}{}", acc.2, i.2))
         });
     embed.field("Cards", cards, true);
     embed.field("Stats", stats, true);
+    embed.field("ID", ids, true);
 
     embed
 }

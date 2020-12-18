@@ -18,6 +18,7 @@ pub struct Player {
 pub struct PlayerCard {
     pub base_card_id: u32,
     pub player_card_id: String,
+    pub mal_id: u32,
     pub name: String,
     pub rarity: Rarity,
     pub class: Class,
