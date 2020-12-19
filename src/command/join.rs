@@ -12,7 +12,7 @@ pub async fn execute(ctx: Context, msg: Message) {
         nickname: msg.author.name.clone(),
         discord_id: msg.author.id.0,
         channel_id: msg.channel_id.0,
-        discriminator: msg.author.discriminator
+        discriminator: msg.author.discriminator,
     };
 
     let player = {

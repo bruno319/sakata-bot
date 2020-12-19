@@ -3,11 +3,11 @@ use std::str::SplitWhitespace;
 use log::*;
 use serenity::model::prelude::Message;
 use serenity::prelude::Context;
-
-use crate::types::model::{Class, Domain};
-use crate::api::SakataApi;
 use serenity::utils::MessageBuilder;
+
+use crate::api::SakataApi;
 use crate::embed;
+use crate::types::model::{Class, Domain};
 
 pub async fn execute(ctx: Context, msg: Message, args: SplitWhitespace<'_>) {
     let query = valid_query(args);
