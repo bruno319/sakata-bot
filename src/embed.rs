@@ -50,7 +50,13 @@ fn mount_card_list(cards: &Vec<PlayerCard>) -> (String, String, String) {
     cards.iter()
         .map(|c| {
             let n = format!("{}\n", c.name);
-            let s = format!("[**{}**] {}\n", c.overall_power, c.rarity.to_string());
+            let s = format!(
+                "[**{}**] {} **{}**-**{}**\n",
+                c.overall_power,
+                c.rarity.emoji(),
+                c.class.abbrev(),
+                c.domain.abbrev()
+            );
             let id = format!("{}\n", c.mal_id);
             (n, s, id)
         })

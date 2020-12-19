@@ -54,6 +54,16 @@ impl Rarity {
             Rarity::Legend => Colour::from((102, 255, 224)),
         }
     }
+
+    pub fn emoji(&self) -> String {
+        match self {
+            Rarity::Silver => "\u{26AA}",
+            Rarity::Gold => "\u{1F7E1}",
+            Rarity::Epic => "\u{1F7E3}",
+            Rarity::Legend => "\u{1F535}",
+            Rarity::Unknown => "\u{26AB}"
+        }.to_string()
+    }
 }
 
 impl ToString for Rarity {
@@ -65,6 +75,26 @@ impl ToString for Rarity {
             Rarity::Legend => "Legend".to_string(),
             _ => "".to_string()
         }
+    }
+}
+
+impl Class {
+    pub fn abbrev(&self) -> String {
+        match self {
+            Class::Fighter => "FIG",
+            Class::Magician => "MAG",
+            Class::Swordsman => "SWO",
+            Class::Ranger => "RNG",
+            Class::Rogue => "ROG",
+            Class::Support => "SUP",
+            Class::Beast => "BEA",
+            Class::Machinist => "MCH",
+            Class::Supernatural => "SPR",
+            Class::Scholar => "SCH",
+            Class::Worker => "WRK",
+            Class::Musician => "MUS",
+            Class::Unknown => ""
+        }.to_string()
     }
 }
 
@@ -105,6 +135,23 @@ impl From<Option<&str>> for Class {
             "musician" => Class::Musician,
             _ => Class::Unknown,
         }
+    }
+}
+
+impl Domain {
+    pub fn abbrev(&self) -> String {
+        match self {
+            Domain::Action => "ACT",
+            Domain::Adventure => "ADV",
+            Domain::Fantasy => "FAN",
+            Domain::SciFi => "SCF",
+            Domain::Sports => "SPO",
+            Domain::Mystery => "MYS",
+            Domain::SliceOfLife => "SOL",
+            Domain::Comedy => "CMD",
+            Domain::Romance => "ROM",
+            Domain::Unknown => "",
+        }.to_string()
     }
 }
 
