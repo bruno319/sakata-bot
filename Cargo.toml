@@ -5,7 +5,7 @@ authors = ["bruno319 <brunovieira319@hotmail.com>"]
 edition = "2018"
 
 [dependencies]
-tokio = { version = "0.2", features = ["macros"] }
+tokio = { version = "1.8", features = ["macros"] }
 serenity = { default-features = false, features = ["client", "gateway", "model", "rustls_backend", "utils"], version = "0.9" }
 reqwest = { version = "0.10.9", features = ["json"] }
 serde = "1.0"
